@@ -1,0 +1,113 @@
+pretty much all the things we try to archive (that I can tell)
+cron:
+0 6 * * * oper /awips/hydroapps/local/scripts/grib_tochps_archive.sh  >> /home/oper/transfer_grib_log 2>&1
+
+does this: (all these files come from nc2grib.sh runs... we should really change this to cp -p to diminish confusion )
+cd /awips/hydroapps/lx/rfc/grib/output
+cp qpf* /awips/rep/grib/qpf
+cp ta* /awips/rep/grib/qtf
+cp *rtma* /awips/rep/grib/qte
+cp gfsqpf* /awips/rep/grib/gfsqpf
+cp gfst06* /awips/rep/grib/gfsqtf
+cp namqpf* /awips/rep/grib/namqpf
+cp namt06f* /awips/rep/grib/namqtf
+cp ecmqpf* /awips/rep/grib/ecmwfqpf
+cp ecmt06* /awips/rep/grib/ecmwfqtf
+cp gemqpf* /awips/rep/grib/gemqpf
+cp nmmqpf* /awips/rep/grib/wrfqpf
+cp arwqpf* /awips/rep/grib/wrfqpf
+
+winter cron-
+55 16 * 11,12,1,2,3,4 * awips /awips/hydroapps/local/scripts/AWIPS2-make_qpf4isc.s/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh QPFH chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh GFS chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh NAM chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh ECM chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh NBM chps
+
+then:
+cd /awips/rep/grib/dump
+mv qpf* /awips/rep/grib/qpf
+mv ta01_rtma* /awips/rep/grib/rtma_ta01
+mv ta01_urma* /awips/rep/grib/rtma_ta01
+mv ta01f_has* /awips/rep/grib/has_ta01
+mv ta* /awips/rep/grib/qtf
+mv gfsqpf* /awips/rep/grib/gfsqpf
+mv gfst06* /awips/rep/grib/gfsqtf
+mv namqpf* /awips/rep/grib/namqpf
+mv namt06f* /awips/rep/grib/namqtf
+mv ecmqpf* /awips/rep/grib/ecmwfqpf
+mv ecmt06* /awips/rep/grib/ecmwfqtf
+mv gemqpf* /awips/rep/grib/gemqpf
+mv nmmqpf* /awips/rep/grib/wrfqpf
+mv arwqpf* /awips/rep/grib/wrfqpf
+mv fzl06f_has* /awips/rep/grib/flf
+mv tx24f_has* /awips/rep/grib/has_tx24
+mv tn24f_has* /awips/rep/grib/has_tn24
+mv tx24_rtma* /awips/rep/grib/rtma_tx24
+mv tn24_rtma* /awips/rep/grib/rtma_tn24
+mv tx24_urma* /awips/rep/grib/rtma_tx24
+mv tn24_urma* /awips/rep/grib/rtma_tn24
+
+5 17 * * * oper /awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh AKURMA chps >> /dev/null 2>&1
+15 * * * * oper /awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib_hr_basistime.sh AKRTMA chps >> /dev/null 2>&1
+
+0 22 * * * awips /awips/hydroapps/local/scripts/rsync-grib.sh > /home/awips/rsync-grib.log
+copies from MPE to rep archive:
+griddir="/awips2/edex/data/share/hydroapps/precip_proc/local/data/mpe/dailyQC/precip/grid/"
+for file in "precip_acr_grid_12_12*.grb" "precip_acr_grid_18_00*.grb precip_acr_grid_12_18*.grb" "precip_acr_grid_06_12*.grb" "precip_acr_grid_00_06*.grb"
+do
+	if [ $file == "precip_acr_grid_12_12*.grb" ]
+	then
+		rsync -av $griddir$file /awips/rep/grib/qpe24
+	else
+		rsync -av $griddir$file /awips/rep/grib/qpe06
+
+------------------------------------------------------------------------------
+**i rephrased some things to loop to make this easier 
+As for HAS scripts----
+MPE(QPE) to CHPS:
+script /awips/hydroapps/local/scripts/operational/moveDQCToCHPS.sh:
+qtedir=awips2/edex/data/share/hydroapps/precip_proc/local/data/mpe/dailyQC/temperature/grid/
+for hr in "00" "06" "12" "18":do
+ find $qtedir -name temperature_acr_grid_${hr}_\?\?\?\?\?\?\?\?.grb -mmin -1200 -exec cp '{}' /awips/rep/grib/qte_dqc_ta06 ';'
+done
+find $qtedir -name temperature_acr_grid_max_\?\?\?\?\?\?\?\?.grb -mmin -1200 -exec cp '{}' /awips/rep/grib/qte_dqc_tx24 ';'
+find $qtedir -name temperature_acr_grid_min_\?\?\?\?\?\?\?\?.grb -mmin -1200 -exec cp '{}' /awips/rep/grib/qte_dqc_tn24 ';'
+
+Send HAS QPF to CHPS:
+script /awips/hydroapps/local/scripts/AWIPS2-sort-archive.sh:
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh QPFh chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh QPF3 chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh GFS chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh NAM chps
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh ECM chps
+
+/awips2/edex/data/share/hydroapps/precip_proc/local/data/app/nc2grib/nc2grib.sh NBM chps 
+scp -o LogLevel=error /awips/hydroapps/lx/rfc/grib/output/nbmqpf06f_nbm_* fews@chps3:/awips/chps_local/data/toCHPS/aprfc/grib1/qpf/nbm/
+rm /awips/hydroapps/lx/rfc/grib/output/nbmqpf06f_nbm_*
+
+
+cd /awips/rep/grib/dump
+mv qpf* /awips/rep/grib/qpf
+# Moved the ta01_rtma and ta01f_has lines above the ta* line for obvious reasons - rgo - 20150114
+mv ta01_rtma* /awips/rep/grib/rtma_ta01
+mv ta01_urma* /awips/rep/grib/rtma_ta01
+mv ta01f_has* /awips/rep/grib/has_ta01
+mv ta* /awips/rep/grib/qtf
+# cp *rtma* /awips/rep/grib/qte
+mv gfsqpf* /awips/rep/grib/gfsqpf
+mv gfst06* /awips/rep/grib/gfsqtf
+mv namqpf* /awips/rep/grib/namqpf
+mv namt06f* /awips/rep/grib/namqtf
+mv ecmqpf* /awips/rep/grib/ecmwfqpf
+mv ecmt06* /awips/rep/grib/ecmwfqtf
+mv gemqpf* /awips/rep/grib/gemqpf
+mv nmmqpf* /awips/rep/grib/wrfqpf
+mv arwqpf* /awips/rep/grib/wrfqpf
+mv fzl06f_has* /awips/rep/grib/flf
+mv tx24f_has* /awips/rep/grib/has_tx24
+mv tn24f_has* /awips/rep/grib/has_tn24
+mv tx24_rtma* /awips/rep/grib/rtma_tx24
+mv tn24_rtma* /awips/rep/grib/rtma_tn24
+mv tx24_urma* /awips/rep/grib/rtma_tx24
+mv tn24_urma* /awips/rep/grib/rtma_tn24

@@ -1,0 +1,25 @@
+Beginning Time(Z):   2021-05-20 17:00:00
+Ending Time(Z):      2021-05-28 17:00:00
+Station Identifier:  HNRA2
+Physical Element:    HG
+Duration:            0
+SHEF Type Source:    FZ
+SHEF Extremum:       Z
+Basis Time(Z):       2021-05-25 15:34:00
+
+          Derived             R S Q
+  Value    Flow     Time(Z)   V Q C  Product      Time       Posted
+-------- -------- ----------- - - - ---------- ----------- -----------
+   10.16     7465 05/28 12:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+   10.10     7276 05/28 06:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+   10.04     7075 05/28 00:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.98     6867 05/27 18:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.93     6710 05/27 12:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.90     6594 05/27 06:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.85     6437 05/27 00:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.78     6239 05/26 18:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.71     6025 05/26 12:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.66     5847 05/26 06:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.60     5689 05/26 00:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.54     5517 05/25 18:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36
+    9.50     5403 05/25 12:00 T Z G  MSGPRODID 05/25 15:36 05/25 15:36

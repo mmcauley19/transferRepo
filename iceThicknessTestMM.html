@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ice thickness test MM</title>
+<meta charset="utf-8">
+<script src="https://www.weather.gov/js/jquery-1.10.2.min.js"></script>
+<script src="https://www.weather.gov/js/jquery-ui-1.10.3.custom.min.js"></script>
+<!--link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" />
+<link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.js"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
+<script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/1.0.0-rc.5/esri-leaflet.js"></script><script src="https://www.weather.gov/source/aprfc/js/jquery-ui.min.js"></script>
+<style>
+#holder {
+	        width : 960px;
+	        height : 500px;
+	    }
+		
+	    #map {
+	        width : 700px;
+	        height : 500px;
+	        position: relative;
+	        float: left;
+	    }
+		
+	    #select {
+			font-size: 12px;
+	    	width : 260px;
+	        height : 500px;
+	        position: relative;
+	        float: left;
+	    }
+		.infobox {
+			background-color: #ffffff;
+			border-radius: 5px;
+			box-shadow: 0 1px 7px rgba(0,0,0,0.65);
+			padding: 6px;
+			margin: 5px;
+		}
+		#alert {
+			position:fixed;
+			top: 35%;
+    		left: 50%;
+			display: none;
+			z-index: 999;
+			width : 200px;
+	        height : 50px;
+	        margin-top: -5px;
+			margin-left: -100px;
+	        font-size: 20px;
+	        color: blue;
+	        white-space:nowrap;
+		  	text-shadow: 0 0 0.01em black, 0 0 0.01em black,
+		        0 0 0.01em black,0 0 0.01em black,0 0 0.01em;
+		}
+		
+		#progress {
+			display: none;
+			position: absolute;
+			background-color: #ffffff;
+			top: 25%;
+			left: 50%;
+			margin-top: -20px;
+			margin-left: -150px;
+			width: 300px;
+			height: 40px;
+			z-index: 999;
+		}
+		
+		.legend {
+		    line-height: 18px;
+            font-weight: bold;
+		}
+		
+		.legend i {
+		    width: 18px;
+		    height: 18px;
+		    float: left;
+		    margin-right: 8px;
+		    opacity: 0.9;
+		}
+		
+		.baseIcon{
+			font-size: 16px;
+		  	white-space:nowrap;
+		  	font-weight: bold;
+		  	text-shadow: 0 0 0.1em black, 0 0 0.1em black,
+		        0 0 0.1em black,0 0 0.1em black,0 0 0.1em;
+		}
+		
+		.labelClass5{
+		  	color: #a20a0a;
+		}
+		.labelClass10{
+		  	color: #ff8000;
+		}
+		.labelClass20{
+		  	color: #cf8717;
+		}
+		.labelClass30{
+		  	color: #ffff00;
+		}
+		.labelClass40{
+		  	color: #00ff00;
+		}
+		.labelClass50{
+		  	color: #04dfff;
+		}
+		.labelClass75{
+		  	color: #0000ff;
+		}
+		.labelClass9000{
+		  	color: #ff00ff;
+		}
+		.pctClass200{
+		  	color: #7800b4;
+		}
+		.pctClass175{
+		  	color: #4b2dda;
+		}
+		.pctClass150{
+		  	color: #1e5aff;
+		}
+		.pctClass125{
+		  	color: #19918a;
+		}
+		.pctClass100{
+		  	color: #14c814;
+		}
+		.pctClass75{
+		  	color: #8ae428;
+		}
+		.pctClass50{
+		  	color: #ffff3c;
+		}
+		.pctClass25{
+		  	color: #eb801e;
+		}
+		.pctClass1{
+		  	color: #d70000;
+		}
+		.ui-datepicker-calendar {
+			display: none;
+		}
+		.ui-datepicker-inline {
+			margin: 0 auto;
+		}
+        ul#subMenuNav li .sub {
+            z-index:9999;
+        }
+        #nextMonth {
+			font-style: italic;
+			font-weight: bold;
+			color: blue;
+		}
+</style>
+</head>
+<body>
+<div id="holder">
+<div id="progress">
+<div id="progtext">
+<h1>Loading Data...</h1>
+</div>
+
+<div id="progressBar" style="width:300px;height:30px">&nbsp;</div>
+</div>
+
+<div id="title">
+<h2>Ice Thickness Map</h2>
+</div>
+
+<div id="map">&nbsp;</div>
+
+<div id="select">
+<div class="infobox" id="desc">
+Ice thickness measurements are generally taken near the beginning of the month from October to June. Readings taken near the end of the month<br />
+are appied to the following month.<br />
+<br />
+To view historical readings please select the month/year below:</div>
+
+<div class="date-picker infobox" id="date">&nbsp;</div>
+
+<div class="infobox" id="radio"><label><input checked="checked" id="n" name="s" type="radio" value="n" />Ice Thickness</label><br />
+<label><input id="p" name="s" type="radio" value="p" />Ice Thickness % Avg</label>
+
+<hr /> <label><input id="t" type="checkbox" />Circle Markers</label></div>
+
+<div class="infobox" id="links"><strong>Ice Links</strong>
+
+<ul>
+	<li><a href="https://www.dnr.state.mn.us/safety/ice/thickness.html">General ice thickness guidelines</a></li>
+	<li><a href="http://rivergages.mvr.usace.army.mil/WaterControl/Districts/MVP/reports/ice/ice_load.html">US Army Corps of Engineering - Safe Loads on Ice Sheets</a></li>
+	<li><a href="https://www.youtube.com/watch?v=ysnKtuUTt8k">This YouTube link</a> has good information on what to do if you fall through the ice.</li>
+</ul>
+</div>
+</div>
+</div>
+<script>
+var ajaxPre = "https://cors-anywhere.herokuapp.com/https://www.weather.gov";
+            $("#progressBar").progressbar({
+								value: false
+							});
+			$("#tog").attr('disabled','disabled');
+			function getColor(d) {
+				return d <= 5  		? '#a20a0a' :
+						d <= 10  	? '#ff8000' :
+						d <= 20  	? '#cf8717' :
+						d <= 30  	? '#ffff00' :
+						d <= 40  	? '#00ff00' :
+						d <= 50  	? '#04dfff' :
+						d <= 75   	? '#0000ff' :
+									  '#ff00ff';
+			}
+			function getAvgColor(d) {
+				return d >= 200  ? '#7800b4' :
+					   d >= 175  ? '#4b2dda' :
+					   d >= 150  ? '#1e5aff' :
+					   d >= 125  ? '#19918a' :
+					   d >= 100  ? '#14c814' :
+					   d >= 75   ? '#8ae428' :
+					   d >= 50   ? '#ffff3c' :
+					   d >= 25   ? '#eb801e' :
+								   '#d70000';
+			}
+			function getColorIdx(d){
+				if (d <= 5){return 5;}
+				else if (d <= 10){return 10;}
+				else if (d <= 20){return 20;}
+				else if (d <= 30){return 30;}
+				else if (d <= 40){return 40;}
+				else if (d <= 50){return 50;}
+				else if (d <= 75){return 75;}
+				else {return 9000;}
+			}
+		
+			function getAvgColorIdx(d) {
+				return d >= 200  ? 200 :
+					   d >= 175  ? 175 :
+					   d >= 150  ? 150 :
+					   d >= 125  ? 125 :
+					   d >= 100  ? 100 :
+					   d >= 75   ? 75 :
+					   d >= 50   ? 50 :
+					   d >= 25   ? 25 :
+								   1;
+			}
+			
+			var d = new Date();
+			thisYear = d.getFullYear();
+			thisMonth = d.getMonth()+1;
+			//Marker Properties
+            var geojsonMarkerOptions = {
+                radius : 5,
+                fillColor : "white",
+                color : "#111111",
+                weight : 1,
+                opacity : 1,
+                fillOpacity : 0.9
+            };
+			//Make Map
+			var map = L.map('map').setView([63.4400, -153.3567], 4);
+			L.esri.basemapLayer("NationalGeographic").addTo(map);
+			var avg, num, pct;
+      //var numLayer;
+    //  numLayer = L.featureGroup().addTo(map);
+			function mapIt(mo,yr){
+$("#progress").show();
+				if (typeof geojsonLayer !== 'undefined'){
+					map.removeLayer(geojsonLayer);
+				}
+				if (typeof geojsonLayerExtra !== 'undefined'){
+					map.removeLayer(geojsonLayerExtra);
+				}
+				if (typeof geojsonAvgLayer !== 'undefined'){
+					map.removeLayer(geojsonAvgLayer);
+				}
+				if (typeof markerLayer !== 'undefined'){
+					map.removeLayer(markerLayer);
+				}
+				if (typeof markerAvgLayer !== 'undefined'){
+					map.removeLayer(markerAvgLayer);
+				}
+				console.log ("Month: "+mo+" Yr: "+yr);
+				$.ajax({
+         type: "POST", url: ajaxPre+"/source/aprfc/it_"+yr+"extra.json", dataType: 'json',
+         success: function(response) {
+        geojsonLayerExtra = L.geoJson(response.months[mo], {
+       pointToLayer: function(feature, latlng) {
+        var latestObInx = feature.properties.data.length -1;
+        var date = new Date(feature.properties.data[latestObInx][0]);
+        var data = feature.properties.data[latestObInx][1];
+        var name = feature.properties.name;
+        var dd = date.getUTCDate().toString();
+        var mm = (date.getUTCMonth()+1);
+        var year = date.getUTCFullYear().toString();
+        var dateStr = year+"-"+mm+"-"+dd;
+        colorClass = getColorIdx(data);
+        var divIcon = new L.divIcon({
+									className: 'baseIcon labelClass'+colorClass,
+									html: data+"\""
+								});
+								return L.marker(latlng, {
+									  icon: divIcon
+								}).bindTooltip("<b>Name: </b>"+name+"<br><b>Date: </b>"+dateStr+"<br><b>Ice Thickness: </b>"+data);
+							}
+						});
+      markerLayerExtra = L.geoJson(response.months[mo], {
+						pointToLayer: function (feature, latlng) {
+								var latestObInx = feature.properties.data.length - 1;
+								var date = new Date(feature.properties.data[latestObInx][0]);
+								var data = feature.properties.data[latestObInx][1];
+								var name = feature.properties.name;
+								//var elev = feature.properties.elev;
+								var dd = date.getUTCDate().toString();
+								var mm = (date.getUTCMonth()+1);
+								var year = date.getUTCFullYear().toString();
+								var dateStr = year+"-"+mm+"-"+dd;
+								//assign color to marker
+								geojsonMarkerOptions.fillColor = getColor(data);
+								return L.circleMarker(latlng, geojsonMarkerOptions).bindTooltip("<b>Name: </b>"+name+"<br><b>Date: </b>"+dateStr+"<br><b>Ice Thickness: </b>"+data);
+							}
+						});
+
+				$.ajax({
+					type: "POST",
+					url: ajaxPre+"/source/aprfc/it_"+yr+".json", dataType: 'json',
+					success: function(response) {
+$("#progress").hide();
+						geojsonLayer = L.geoJson(response.months[mo], {
+							pointToLayer: function(feature, latlng) {
+								var latestObInx = feature.properties.data.length - 1;
+								var date = new Date(feature.properties.data[latestObInx][0]);
+								var data = feature.properties.data[latestObInx][1];
+								if (feature.properties.averages !== null){
+									avg = feature.properties.averages[mo].avg;
+									num = feature.properties.averages[mo].num;
+									pct = Math.round((data / avg) * 100);
+									avgStr = "<b>% Avg Ice Thickness: </b>"+pct+"%<br><b>Average: </b>"+avg+"\"<br><b>n = "+num+"</b>";
+								}else{
+									avg = 0;
+									num = 0;
+									pct = "*";
+									avgStr = "<b>% Avg Ice Thickness: </b><br>Not available due to<br>less than 5 years data.";
+								}
+								var lid = feature.properties.lid;
+								var name = feature.properties.name;
+								var elev = feature.properties.elev;
+								var dd = date.getUTCDate().toString();
+								var mm = (date.getUTCMonth()+1);
+                                if (mm > thisMonth){
+									$('#nextMonth').text("Notice: There are readings available for next month.\n  Click the right arrow to view." );
+								}
+								var year = date.getUTCFullYear().toString();
+								var dateStr = year+"-"+mm+"-"+dd;
+								colorClass = getColorIdx(data);
+			
+								var divIcon = new L.divIcon({
+									className: 'baseIcon labelClass'+colorClass,
+									html: data+"\""
+								});
+								return L.marker(latlng, {
+									  icon: divIcon
+								}).bindTooltip("<b>Station ID: </b>"+lid+"<br><b>Name: </b>"+name+"<br><b>Elev: </b>"+elev+"<br><b>Date: </b>"+dateStr+"<br><b>Ice Thickness: </b>"+data+"\"<br>"+avgStr);
+							}
+						});
+						
+						markerLayer = L.geoJson(response.months[mo], {
+							pointToLayer: function (feature, latlng) {
+								var latestObInx = feature.properties.data.length - 1;
+								var date = new Date(feature.properties.data[latestObInx][0]);
+								var data = feature.properties.data[latestObInx][1];
+								if (feature.properties.averages !== null){
+									avg = feature.properties.averages[mo].avg;
+									num = feature.properties.averages[mo].num;
+									pct = Math.round((data / avg) * 100);
+									avgStr = "<b>% Avg Ice Thickness: </b>"+pct+"%<br><b>Average: </b>"+avg+"\"<br><b>n = "+num+"</b>";
+								}else{
+									avg = 0;
+									num = 0;
+									pct = "*";
+									avgStr = "<b>% Avg Ice Thickness: </b><br>Not available due to<br>less than 5 years data.";
+								}
+								var lid = feature.properties.lid;
+								var name = feature.properties.name;
+								var elev = feature.properties.elev;
+								var dd = date.getUTCDate().toString();
+								var mm = (date.getUTCMonth()+1);
+								var year = date.getUTCFullYear().toString();
+								var dateStr = year+"-"+mm+"-"+dd;
+								//assign color to marker
+								geojsonMarkerOptions.fillColor = getColor(data);
+								return L.circleMarker(latlng, geojsonMarkerOptions).bindTooltip("<b>Station ID: </b>"+lid+"<br><b>Name: </b>"+name+"<br><b>Elev: </b>"+elev+"<br><b>Date: </b>"+dateStr+"<br><b>Ice Thickness: </b>"+data+"\"<br>"+avgStr);
+							}
+						});
+                        geojsonAvgLayer = L.geoJson(response.months[mo], {
+							pointToLayer: function(feature, latlng) {
+								var latestObInx = feature.properties.data.length - 1;
+								var date = new Date(feature.properties.data[latestObInx][0]);
+								var data = feature.properties.data[latestObInx][1];
+								if (feature.properties.averages !== null){
+									avg = feature.properties.averages[mo].avg;
+									num = feature.properties.averages[mo].num;
+									pct = Math.round((data / avg) * 100);
+									avgStr = "<b>% Avg Ice Thickness: </b>"+pct+"%<br><b>Average: </b>"+avg+"\"<br><b>n = "+num+"</b>";
+								}else{
+									//avg = 0;
+									//num = 0;
+									//pct = "*";
+									//avgStr = "<b>% Avg Ice Thickness: </b><br>Not available due to<br>less than 5 years data.";
+									return false;
+								}
+								var lid = feature.properties.lid;
+								var name = feature.properties.name;
+								var elev = feature.properties.elev;
+								var dd = date.getUTCDate().toString();
+								var mm = (date.getUTCMonth()+1);
+								var year = date.getUTCFullYear().toString();
+								var dateStr = year+"-"+mm+"-"+dd;
+								colorClass = getAvgColorIdx(pct);
+			
+								var divIcon = new L.divIcon({
+									className: 'baseIcon pctClass'+colorClass,
+									html: pct+"\%"
+								});
+								return L.marker(latlng, {
+									  icon: divIcon
+								}).bindTooltip("<b>Station ID: </b>"+lid+"<br><b>Name: </b>"+name+"<br><b>Elev: </b>"+elev+"<br><b>Date: </b>"+dateStr+"<br><b>Ice Thickness: </b>"+data+"\"<br>"+avgStr);
+							}
+						});
+						
+						markerAvgLayer = L.geoJson(response.months[mo], {
+							pointToLayer: function (feature, latlng) {
+                                var latestObInx = feature.properties.data.length - 1;
+								var date = new Date(feature.properties.data[latestObInx][0]);
+								var data = feature.properties.data[latestObInx][1];
+								if (feature.properties.averages !== null){
+									avg = feature.properties.averages[mo].avg;
+									num = feature.properties.averages[mo].num;
+									pct = Math.round((data / avg) * 100);
+									avgStr = "<b>% Avg Ice Thickness: </b>"+pct+"%<br><b>Average: </b>"+avg+"\"<br><b>n = "+num+"</b>";
+								}else{
+									//avg = 0;
+									//num = 0;
+									//pct = "*";
+									//avgStr = "<b>% Avg Ice Thickness: </b><br>Not available due to<br>less than 5 years data.";
+									return false;
+								}
+								var lid = feature.properties.lid;
+								var name = feature.properties.name;
+								var elev = feature.properties.elev;
+								var dd = date.getUTCDate().toString();
+								var mm = (date.getUTCMonth()+1);
+								var year = date.getUTCFullYear().toString();
+								var dateStr = year+"-"+mm+"-"+dd;
+								//assign color to marker
+								geojsonMarkerOptions.fillColor = getAvgColor(pct);
+
+								return L.circleMarker(latlng, geojsonMarkerOptions).bindTooltip("<b>Station ID: </b>"+lid+"<br><b>Name: </b>"+name+"<br><b>Elev: </b>"+elev+"<br><b>Date: </b>"+dateStr+"<br><b>Ice Thickness: </b>"+data+"\"<br>"+avgStr);
+							}
+						});
+						if (typeof legend === "undefined" ){
+							legend = L.control({position: 'topright'});
+							legend.onAdd = function (map) {
+								map.legend = this;
+								var div = L.DomUtil.create('div', 'info legend'),
+									grades = [0, 5, 10, 20, 30, 40, 50, 75];
+								div.innerHTML =	'<b>Ice Thickness</b><br>';
+			
+								// loop through our density intervals and generate a label with a colored square for each interval
+								for (var i = 0; i < grades.length; i++) {
+									div.innerHTML +=
+										'<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+										grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+								}
+								return div;
+							};
+							legend.onRemove = function (map) {
+								delete map.legend;
+							};
+						}
+						
+						if (typeof pctLegend === "undefined" ){
+							pctLegend = L.control({position: 'topright'});
+							pctLegend.onAdd = function (map) {
+								map.pctLegend = this;
+								var div = L.DomUtil.create('div', 'info legend'),
+									grades = [0, 25, 50, 75, 100, 125, 150, 175, 200];
+								div.innerHTML =	'<b>% Normal Ice Thickness</b><br>';
+			
+								// loop through our density intervals and generate a label with a colored square for each interval
+								for (var i = 0; i < grades.length; i++) {
+									div.innerHTML +=
+										'<i style="background:' + getAvgColor(grades[i] + 1) + '"></i> ' +
+										grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+								}
+								return div;
+							};
+							pctLegend.onRemove = function (map) {
+								delete map.pctLegend;
+							};
+						}
+						geojsonLayer.on('click', function (d) {
+							name = d.layer.feature.properties.name;
+							waterYr = d.layer.feature.properties.waterYr;
+							$.ajax({
+								type: "POST",
+								url: ajaxPre+"/source/aprfc/it_waterYr_"+waterYr+".json",
+								dataType: 'json',
+								success: function (response) {
+										console.log(response);
+									}
+							});
+						});
+						
+						
+						
+						function update() {
+							var sel = $("input[name=s]:checked").val();
+							if (sel == "n"){
+								$("#title").html('<h2>Ice Thickness Map</h2>');
+								if (typeof map.pctLegend !== "undefined" ){
+										map.removeControl(pctLegend);
+								}
+								if (typeof map.legend == "undefined" ){
+										map.addControl(legend);
+								}
+								
+								
+								map.removeLayer(geojsonAvgLayer);
+								map.removeLayer(markerAvgLayer);
+								if ($("#t").is(':checked')) {
+									map.addLayer(markerLayer);
+									map.removeLayer(geojsonLayer);
+									map.removeLayer(geojsonLayerExtra);
+								}else{
+									map.addLayer(geojsonLayer);
+									map.addLayer(geojsonLayerExtra);
+									map.removeLayer(markerLayer);
+								}
+							}else if (sel == 'p'){
+								$("#title").html('<h2>% Average Ice Thickness Map</h2>');
+								if (typeof map.legend !== "undefined" ){
+										map.removeControl(legend);
+								}
+								if (typeof map.pctLegend == "undefined" ){
+										map.addControl(pctLegend);
+								}
+								map.removeLayer(geojsonLayer);
+								map.removeLayer(markerLayer);
+								if ($("#t").is(':checked')) {
+									map.addLayer(markerAvgLayer);
+									map.removeLayer(geojsonAvgLayer);
+								}else{
+									map.addLayer(geojsonAvgLayer);
+									map.removeLayer(markerAvgLayer);
+								}
+							}
+						}
+						$("input[name=s], #t").click(update);
+						update();
+					}
+				});
+       }
+      });
+			}
+			
+			$(document).ready(function() {
+				function pad(n) {
+					return (n < 10) ? ("0" + n) : n;
+				}			
+				$('.date-picker').datepicker({
+					dateFormat: "mm/yy",
+					changeMonth: true,
+					changeYear: true,
+					yearRange:'-90:+0',
+					onChangeMonthYear: function(year, month) {
+						mapIt(pad(month),year);
+					},
+					showButtonPanel: false
+				});
+				var mo = $("select.ui-datepicker-month").val();
+				mo++;
+				var yr = $("select.ui-datepicker-year").val();
+				mapIt(pad(mo),yr);
+							
+			});
+
+
+	    </script>
+
+</body>
+</html>

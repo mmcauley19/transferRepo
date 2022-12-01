@@ -1,0 +1,33 @@
+Build Hourly Fix
+
+1)	 Pull the attached script (process_hourly.pl) into AWIPS and put it into: /localapps/runtime/bin
+2)	 Make sure the script is executable:   chmod 755 process_hourly.pl
+3)	 Fix the run_build_hourly script:
+
+cd /awips2/edex/data/share/hydroapps/precip_proc/local/bin
+sudo vi ./run_build_hourly
+Edit line 47 (approx.) and change: 
+TYPE_HANDLING=PTYPE              # SAME / PTYPE  
+to:
+TYPE_HANDLING=SAME              # SAME / PTYPE     
+
+Add a new line after: 
+echo " " >>$BUILD_HOURLY_LOGFILE
+echo "Process resulting hourly file... " >>$BUILD_HOURLY_LOGFILE
+
+Add this line : 
+/localapps/runtime/bin/process_hourly.pl $END_TIME >>$BUILD_HOURLY_LOGFILE 2>&1
+
+Save the file.
+Save a backup copy of the file:
+sudo cp ./run_build_hourly  ./run_build_hourly.backup
+
+Wait until the next fielgen run happens.  Usually it runs at 25 minues after the hour.  
+So around 30 past, check for the data using XDAT or psql.
+Check for the data in MPE.
+
+Sometimes during an AWIPS software build install, the precip_proc scripts get ovewritten,  but 
+if you save a backup copy you can get it back easily.
+
+
+

@@ -1,0 +1,7 @@
+awips2-java-11.0.13+8-20.3.2.31.el7_9.x86_64
+java-1.6.0-openjdk-1.6.0.41-1.13.13.1.el7_3.x86_64
+java-1.6.0-openjdk-devel-1.6.0.41-1.13.13.1.el7_3.x86_64
+java-1.8.0-openjdk-headless-1.8.0.352.b08-2.el7_9.x86_64
+javapackages-tools-3.4.1-11.el7.noarch
+python-javapackages-3.4.1-11.el7.noarch
+tzdata-java-2022f-1.el7.noarch

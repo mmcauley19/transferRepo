@@ -1,0 +1,147 @@
+ABRA2 Amber Lake North
+ACSA2 Susitna River at Alexander Creek
+AKLA2 Auke Lake near Auke Bay
+ALLA2 Allakaket
+ALSA2 Port Alsworth RAWS
+APTA2 Anchor River at New Sterling Highway
+ATRA2 Atigun River nr PS 4 nr Wiseman
+BCKA2 Buckland River at Buckland
+BETA2 Kuskokwim River at Bethel
+BGDA2 Tanana River at Big Delta
+BRKA2 Bear Creek near Iliamna
+BRLA2 Birch Lake Ice
+BRMA2 Middle Fork Bradley near Homer
+BRUA2 Upper Bradley River near Nuka Glacier nr Homer
+BTTA2 Koyukuk River nr Bettles
+CBRA2 Chena River at Badger Road
+CCSA2 Campbell Creek near Dimond
+CCVA2 Colville Village
+CHAA2 Chatanika River at Elliott Hwy Bridge
+CHFA2 Chena River at Fairbanks
+CHLA2 Little Chena River nr Fairbanks
+CHRA2 Chester Creek at Arctic Blvd
+CHYA2 Cheney Lake in Anchorage
+CIKA2 Chalkyitsik West nr Chalkyitsik
+CJXA2 Kuskokwim River at Crooked Creek
+CKDA2 Crooked Creek at Airport Rd Bridge
+CLKA2 Chelatna Lake
+CLTA2 Chulitna River near Talkeetna
+CNDA2 Chena River at Nordale Road
+CNPA2 Chena Lakes Ice
+COCA2 Cooper Creek at Mouth near Cooper Landing
+CPIA2 Chena River at Pikes Landing Ice
+CRNA2 Chisana River at Northway
+CRSA2 Chatanika River at Steese Hwy Bridge
+CRUA2 Colville River near Umiat
+CSRA2 South Fork Campbell Creek
+CTEA2 Crooked Creek at Central
+CTLA2 Cottonwood Lake
+DIKA2 Kandik River
+ECHA2 Emma Creek Near Healy
+EMYA2 Yukon River at Emmonak
+ENNA2 Tanana River at Nenana
+EOGA2 Eklutna River at Old Glenn Hwy
+EYAA2 Eyak River at Copper River Hwy
+EYRA2 Eyak River
+FISA2 Fish Lake near Talkeetna
+FMLA2 48 Mile Lake nr Chena Hot Springs
+FMRA2 Fortymile River at Taylor Hwy
+FYIA2 Fort Yukon Ice
+GBDA2 Goodpaster River nr Big Delta
+GKNA2 Mankomen Lake
+GOOA2 Goose Lake in Anchorage
+GRSA2 Gulkana River at Sourdough
+GRYA2 Grayling Lake
+GYRA2 Yukon River at Galena
+HAMA2 Hammond River
+HCRA2 Hess Creek near Livengood
+HLIA2 Harding Lake Ice
+HNRA2 Nenana River at Healy
+ILRA2 Iliamna River near Pedro Bay
+ISLA2 Island Lake
+JHNA2 Johnson Lake nr Kasilof
+JIMA2 Jim River
+JNLA2 Jean Lake near Cooper Landing
+JWLA2 Jewel Lake in Anchorage
+KGSA2 King Salmon Creek near King Salmon
+KIAA2 Kobuk River nr Kiana
+KIGA2 Kvichak River at Igiugig
+KLCA2 Kuskokwim River at Lisky's Crossing
+KLGA2 Kuskokwim River at Kalskag
+KNKA2 Knik River near Palmer
+KOWA2 Kroto Creek at Oilwell Road
+KRAA2 Kuskokwim River at Aniak
+KRIA2 Kuskokwim River at Aniak Ice
+KUPA2 Kuparuk River nr Deadhorse
+KZBA2 Kotzebue Lake Ice
+LHIA2 Lake Hood Ice near Anchorage
+LIGA2 Lignite Creek nr Healy
+LMHA2 Lake Minchumina
+LSUA2 Little Su below Hatcher Pass Bridge
+LVRA2 Big River Lakes Ice
+MACA2 Maclaren River at Denali Highway
+MATA2 Matanuska River near Palmer
+MCGA2 Kuskokwim River at McGrath
+MFKA2 Middle Fork Koyukuk River nr Wiseman
+MHSA2 Tanana River at Manley Hot Springs-
+MLLA2 Manley Landing
+MONA2 Montana Creek near Talkeetna
+MXYA2 Kennicott River near McCarthy
+NAPA2 Kuskokwim River at Napaimute
+NICA2 Nenana Ice
+NINA2 Ninilchik River at Ninilchik
+NOAA2 Noatak
+NRNA2 Nation River nr Nation
+NSHA2 Nushagak River at Ekwok
+NULA2 Yukon River at Nulato
+OBRA2 OBrien Creek
+OBUA2 Kobuk River at Kobuk
+OLNA2 Olnes Lake Ice
+PAEC Chulitna River Lodge
+PAEM Emmonak
+PANV Anvik
+PHLA2 Phelan Creek near Paxson
+PRCA2 Porcupine River at mouth of Coleen River
+PROA2 Prospect Creek
+PXKA2 Paxson RAWS
+QULA2 Quartz Lake Ice
+RSHA2 Yukon River at Russian Mission
+SAJA2 Salcha River at Johnson's
+SALA2 Salcha River near Salchaket
+SGRA2 Sagavanirktok River near PS 3 nr Deadhorse
+SLAA2 Slate Creek at Coldfoot
+SLWA2 Selawik River Ice
+SMLA2 Smith Lake Ice
+SNKA2 Snake River near Nome
+SNOA2 Snow River near Seward
+SODA2 Soldotna 5SSW
+SRRA2 Resurrection River at Seward Hwy Brg
+SSLA2 Snowshoe Lake Ice near Nelchina
+SUNA2 Susitna River near Sunshine
+SXRA2 Kenai River at Soldotna
+TAFA2 Tanana River at Fairbanks
+TALA2 Yukon River at Tanana
+TFIA2 Tanana River at Fairbanks Ice
+TKTA2 Talkeetna River at the Talkeetna Railroad Bridge
+TOKA2 Tok
+TRBA2 Tolovana River below Rosebud Creek
+TRCA2 Trapper Creek 7 SW
+TRTA2 Talkeetna River Upstream of Talkeetna
+TSGA2 Tanana River at Tanacross
+TWBA2 Twin Bears Camp
+UCHA2 Chena River nr Two Rivers
+WCIA2 Chandalar Lake Ice
+WILA2 Willow Creek at Parks Highway
+WLWA2 Willow Creek near Willow
+WMCA2 Wiseman Creek at Wiseman
+WPAA2 Waldron Lake in Anchorage
+WSMA2 Wiseman
+WSTA2 Westchester Lagoon in Anchorage
+WULA2 Wulik River blw Tutak Creek nr Kivalina
+YEAA2 Yukon River at Eagle
+YFYA2 Fort Yukon
+YGIA2 Yukon Galena Ice
+YMVA2 Yukon River at Mountain Village
+YPSA2 Yukon River at Pilot Station
+YRBA2 Yukon River nr Stevens Village
+
